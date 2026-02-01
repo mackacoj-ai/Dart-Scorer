@@ -92,32 +92,31 @@
             <button id="add-player-btn">Add Player</button>
         </section>
 
-        <!-- DOUBLES PRACTICE -->
-        <section id="screen-doubles" class="screen">
-            <h2>Doubles Practice</h2>
-            <div id="doubles-target" class="big-target">—</div>
-            <div id="doubles-suggestion" class="suggestion">—</div>
+  <!-- DOUBLES PRACTICE -->
+<section id="screen-doubles" class="screen">
+  <h2>Doubles Practice</h2>
 
-            <div class="keypad">
-                <button class="key">1</button>
-                <button class="key">2</button>
-                <button class="key">3</button>
+  <div id="doubles-target" class="big-target">—</div>
+  <div id="doubles-suggestion" class="suggestion">—</div>
 
-                <button class="key">4</button>
-                <button class="key">5</button>
-                <button class="key">6</button>
+  <!-- New full-width buttons -->
+  <div id="doubles-actions" role="group" aria-label="Doubles actions">
+    <button id="doubles-hit-btn" class="btn-big btn-hit" aria-label="Hit it">
+      Hit it!
+    </button>
+    <button id="doubles-miss-btn" class="btn-big btn-miss" aria-label="Missed it">
+      Missed it!
+    </button>
+  </div>
 
-                <button class="key">7</button>
-                <button class="key">8</button>
-                <button class="key">9</button>
-
-                <button class="key key-zero">0</button>
-                <button class="key key-undo">Undo</button>
-		<button class="key key-enter">Enter</button>
-            </div>
-
-            <button id="next-target-btn">Next Target</button>
-        </section>
+  <!-- Finish % line -->
+  <div id="doubles-stats" aria-live="polite">
+    <h3>Finish %</h3>
+    <div id="doubles-stats-line">
+      1 Dart: 0.0%     2 Dart: 0.0%     3 Dart: 0.0%
+    </div>
+  </div>
+</section>
 
         <!-- SETTINGS -->
         <section id="screen-settings" class="screen">
@@ -145,6 +144,7 @@
 </body>
 
 </html>
+
 
 
 
