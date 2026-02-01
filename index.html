@@ -2,14 +2,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Macka Dart Scorer</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Macka Dart Scorer</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
+  <!-- Styles -->
+  <link rel="stylesheet" href="/style.css" />
 
+  <!-- PWA Manifest (Android/Chrome uses this) -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000">
+
+  <!-- iOS Home Screen icon (REQUIRED for iPhone/iPad) -->
+  <!-- Must be exactly 180×180 PNG; placed at site root as /icon-180.png -->
+  <link rel="apple-touch-icon" href="/icon-180.png" sizes="180x180">
+
+  <!-- (Optional) older iOS sizes -->
+  <!-- <link rel="apple-touch-icon" href="/icon-152.png" sizes="152x152"> -->
+  <!-- <link rel="apple-touch-icon" href="/icon-120.png" sizes="120x120"> -->
+
+  <!-- (Optional) make iOS open as standalone app-like window -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 </head>
 
 <body>
@@ -130,6 +144,7 @@
 </body>
 
 </html>
+
 
 
 
