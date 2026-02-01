@@ -81,7 +81,7 @@
         const before = player.score;
         const after = before - entered;
 
-        // Track checkout attempt
+        // Track checkout attempt by start-of-turn category
         const cat = getFinishCategory(before);
         if (cat === 1) player.chkAttempts1D++;
         if (cat === 2) player.chkAttempts2D++;
@@ -105,7 +105,7 @@
                 return;
             }
 
-            // Success tracking
+            // Success tracking per the same start-of-turn category
             const catStart = getFinishCategory(before);
             if (catStart === 1) player.chkSuccess1D++;
             if (catStart === 2) player.chkSuccess2D++;
@@ -172,7 +172,13 @@
         const attempts = p.chkAttempts1D + p.chkAttempts2D + p.chkAttempts3D;
         const success = p.chkSuccess1D + p.chkSuccess2D + p.chkSuccess3D;
         if (attempts === 0) return 0;
-        return Math.round((success / attempts) * 100);
+        // return as 0..100 number
+        return (success / attempts) * 100;
+    }
+
+    function pctPart(success, attempts) {
+        if (!attempts) return 0;
+        return (success / attempts) * 100;
     }
 
 
@@ -180,42 +186,52 @@
     // PUBLIC API
     // =====================================
 
-window.MatchEngine = {
+    window.MatchEngine = {
 
-    enterScore,
+        enterScore,
 
-    getPlayer(i) {
-        return S.players[i];
-    },
+        getPlayer(i) {
+            return S.players[i];
+        },
 
-    getCurrentPlayer() {
-        return S.currentPlayer;   //  THIS IS THE NEW LINE
-    },
+        getCurrentPlayer() {
+            return S.currentPlayer;
+        },
 
-    getAverages() {
-        const p1 = S.players[0];
-        const p2 = S.players[1];
+        getAverages() {
+            const p1 = S.players[0];
+            const p2 = S.players[1];
 
-        return {
-            p1: {
-                name: p1.name,
-                matchAvg: threeDartAvg(p1.matchScore, p1.matchDarts),
-                turnsAvg: turnsPerLegWon(p1),
-                checkout: checkoutPercent(p1)
-            },
-            p2: {
-                name: p2.name,
-                matchAvg: threeDartAvg(p2.matchScore, p2.matchDarts),
-                turnsAvg: turnsPerLegWon(p2),
-                checkout: checkoutPercent(p2)
-            }
-        };
-    },
+            const pack = (p) => ({
+                name: p.name,
+                matchAvg: threeDartAvg(p.matchScore, p.matchDarts),
+                turnsAvg: turnsPerLegWon(p),
+                checkout: checkoutPercent(p),    // overall %
+                matchDarts: p.matchDarts,
+                setsWon: p.setsWon,
+                legsWon: p.legsWon,
 
-    reset() {
-        State.resetMatchState();
-    }
-};
+                chkAttempts1D: p.chkAttempts1D,
+                chkAttempts2D: p.chkAttempts2D,
+                chkAttempts3D: p.chkAttempts3D,
+                chkSuccess1D: p.chkSuccess1D,
+                chkSuccess2D: p.chkSuccess2D,
+                chkSuccess3D: p.chkSuccess3D,
 
+                chkPct1D: pctPart(p.chkSuccess1D, p.chkAttempts1D),
+                chkPct2D: pctPart(p.chkSuccess2D, p.chkAttempts2D),
+                chkPct3D: pctPart(p.chkSuccess3D, p.chkAttempts3D)
+            });
+
+            return {
+                p1: pack(p1),
+                p2: pack(p2)
+            };
+        },
+
+        reset() {
+            State.resetMatchState();
+        }
+    };
 
 })();
