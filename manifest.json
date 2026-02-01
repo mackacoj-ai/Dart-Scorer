@@ -1,5 +1,5 @@
 {
-  "name": "Dart Scorer",
+  "name": "Macka Dart Scorer",
   "short_name": "Darts",
   "start_url": "index.html",
   "display": "standalone",
@@ -17,4 +17,5 @@
       "type": "image/png"
     }
   ]
+
 }
