@@ -18,33 +18,21 @@
   // =====================================
 
   function getRandom1DScore() {
-    // 1D = even doubles 2..40 or 50 (bull)
-    const pool = [];
-    for (let v = 2; v <= 40; v += 2) pool.push(v);
-    pool.push(50);
-    const idx = Math.floor(Math.random() * pool.length);
-    return pool[idx];
+    const idx = Math.floor(Math.random() * 21);
+    if (idx === 20) return 50; // bull (double bull)
+    return 2 + idx * 2;        // 2..40 even
   }
 
   function getRandom2DScore() {
-    // 2D = odd 3..49 OR 41..100 (excluding 50 & 99)
-    const pool = [];
-
-    // odd 3..49
-    for (let v = 3; v <= 49; v += 2) pool.push(v);
-
-    // 41..100 excluding 50 and 99
-    for (let v = 41; v <= 100; v++) {
-      if (v === 50 || v === 99) continue;
-      pool.push(v);
+    // ORIGINAL BEHAVIOUR:
+    // 2D targets are 41..100 excluding 50 and 99 (NO odd 3..49)
+    while (true) {
+      const s = Math.floor(Math.random() * (100 - 41 + 1)) + 41;
+      if (s !== 50 && s !== 99) return s;
     }
-
-    const idx = Math.floor(Math.random() * pool.length);
-    return pool[idx];
   }
 
   function getRandom3DScore() {
-    // 3D = 101..170 excluding [159,162,163,166,168,169]
     while (true) {
       const s = Math.floor(Math.random() * (170 - 101 + 1)) + 101;
       if (![159, 162, 163, 166, 168, 169].includes(s)) return s;
@@ -52,21 +40,13 @@
   }
 
   // =====================================
-  // CATEGORY DETECTION (UPDATED)
+  // CATEGORY DETECTION (legacy/safety)
   // =====================================
 
   function getFinishCategory(score) {
-    // 1D: even 2..40 or 50
-    if ((score >= 2 && score <= 40 && score % 2 === 0) || score === 50) return 1;
-
-    // 2D: odd 3..49 OR 41..100 (excl 50, 99)
-    if ((score >= 3 && score <= 49 && score % 2 === 1) ||
-        (score >= 41 && score <= 100 && score !== 50 && score !== 99)) return 2;
-
-    // 3D: 101..170 excluding bogeys
-    if (score >= 101 && score <= 170 &&
-        ![159, 162, 163, 166, 168, 169].includes(score)) return 3;
-
+    if ((score >= 2 && score <= 40 && score % 2 === 0) || score === 50) return 1; // 1D
+    if (score >= 41 && score <= 100 && score !== 50 && score !== 99) return 2;    // 2D
+    if (score >= 101 && score <= 170 && ![159, 162, 163, 166, 168, 169].includes(score)) return 3; // 3D
     return 0;
   }
 
@@ -91,7 +71,7 @@
   }
 
   // =====================================
-  // ENTER VISIT (boolean): finished within the 3-dart visit?
+  // ENTER VISIT (boolean): finished within the 3-dart visit (ending on a double)?
   // -> First increment attempts for the category we JUST attempted
   // -> Then (if hit) increment success for that same category
   // -> Then roll the next target
