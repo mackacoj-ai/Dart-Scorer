@@ -31,7 +31,6 @@
   <nav class="top-nav">
     <button data-screen="match">Match</button>
     <button data-screen="averages">Averages</button>
-    <button data-screen="players">Players</button>
     <button data-screen="doubles">Doubles</button>
     <button data-screen="settings">Settings</button>
   </nav>
@@ -75,19 +74,31 @@
       </div>
 
       <div class="entry-display" id="entry-display">Score: —</div>
+
+      <!-- NEW: Legs/Sets bar (directly under score entry line) -->
+      <div class="match-meta" id="match-meta" aria-label="Match progress">
+        <div class="meta-group">
+          <div class="meta-label">Sets</div>
+          <div class="meta-pills">
+            <div class="pill pill--p1" id="p1-sets">0</div>
+            <div class="pill pill--p2" id="p2-sets">0</div>
+          </div>
+        </div>
+        <div class="meta-group">
+          <div class="meta-label">Legs</div>
+          <div class="meta-pills">
+            <div class="pill pill--p1" id="p1-legs">0</div>
+            <div class="pill pill--p2" id="p2-legs">0</div>
+          </div>
+        </div>
+      </div>
+      <!-- /NEW -->
     </section>
 
     <!-- AVERAGES SCREEN -->
     <section id="screen-averages" class="screen">
       <h2>Averages</h2>
       <div id="averages-content"></div>
-    </section>
-
-    <!-- PLAYERS SCREEN -->
-    <section id="screen-players" class="screen">
-      <h2>Players</h2>
-      <div id="players-list"></div>
-      <button id="add-player-btn">Add Player</button>
     </section>
 
     <!-- DOUBLES PRACTICE -->
@@ -138,7 +149,7 @@
   <script src="engine/checkout.js"></script>
   <script src="engine/match.js"></script>
   <script src="engine/doubles.js"></script>
-  <script src="engine/players.js"></script>
+  <!-- NOTE: players.js removed -->
 
   <!-- APP -->
   <script src="app.js"></script>
