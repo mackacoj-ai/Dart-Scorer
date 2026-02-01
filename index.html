@@ -20,6 +20,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
   <link rel="shortcut icon" href="favicon.ico" />
 
+  <!-- iOS app-like settings -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 </head>
@@ -31,10 +32,11 @@
     <button data-screen="match">Match</button>
     <button data-screen="averages">Averages</button>
     <button data-screen="players">Players</button>
-   button>
+    <button data-screen="doubles">Doubles</button>
     <button data-screen="settings">Settings</button>
   </nav>
 
+  <!-- Main App Container -->
   <main>
 
     <!-- MATCH SCREEN -->
@@ -96,12 +98,12 @@
       <div id="doubles-suggestion" class="suggestion">—</div>
 
       <!-- Hit/Miss buttons -->
-      <div id="doubles-actions" role="group">
-        <button id="doubles-hit-btn" class="btn-big btn-hit">Hit it!</button>
-        <button id="doubles-miss-btn" class="btn-big btn-miss">Missed it!</button>
+      <div id="doubles-actions" role="group" aria-label="Doubles actions">
+        <button id="doubles-hit-btn" class="btn-big btn-hit" aria-label="Hit it">Hit it!</button>
+        <button id="doubles-miss-btn" class="btn-big btn-miss" aria-label="Missed it">Missed it!</button>
       </div>
 
-      <!-- FINISH % (polished card) -->
+      <!-- Finish % (polished card) -->
       <div id="doubles-stats" aria-live="polite">
         <h3>Finish %</h3>
 
@@ -130,7 +132,7 @@
 
   </main>
 
-  <!-- ENGINE SCRIPTS -->
+  <!-- ENGINE SCRIPTS (order matters) -->
   <script src="engine/state.js"></script>
   <script src="data/checkout_table.js"></script>
   <script src="engine/checkout.js"></script>
@@ -141,6 +143,7 @@
   <!-- APP -->
   <script src="app.js"></script>
 
+  <!-- Service worker -->
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("sw.js");
