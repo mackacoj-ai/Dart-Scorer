@@ -152,22 +152,41 @@ function renderMatchScreen() {
     checkoutEl.textContent = suggestion ? `Checkout: ${suggestion}` : "Checkout: —";
   }
 
-  // ACTIVE PLAYER HIGHLIGHT
+  // ACTIVE PLAYER HIGHLIGHT (cards)
   const p1Card = document.getElementById("p1");
   const p2Card = document.getElementById("p2");
   if (p1Card) p1Card.classList.toggle("active", active === 0);
   if (p2Card) p2Card.classList.toggle("active", active === 1);
 
-  // NEW: Legs/Sets counters
-  const p1Legs = document.getElementById("p1-legs");
-  const p2Legs = document.getElementById("p2-legs");
-  const p1Sets = document.getElementById("p1-sets");
-  const p2Sets = document.getElementById("p2-sets");
+  // Player pill text
+  const p1LegsEl = document.getElementById("pill-p1-legs");
+  const p2LegsEl = document.getElementById("pill-p2-legs");
+  const p1SetsEl = document.getElementById("pill-p1-sets");
+  const p2SetsEl = document.getElementById("pill-p2-sets");
+  const p1NameEl = document.getElementById("pill-p1-name");
+  const p2NameEl = document.getElementById("pill-p2-name");
 
-  if (p1Legs) p1Legs.textContent = p1.legsWon ?? 0;
-  if (p2Legs) p2Legs.textContent = p2.legsWon ?? 0;
-  if (p1Sets) p1Sets.textContent = p1.setsWon ?? 0;
-  if (p2Sets) p2Sets.textContent = p2.setsWon ?? 0;
+  if (p1NameEl) p1NameEl.textContent = p1.name;
+  if (p2NameEl) p2NameEl.textContent = p2.name;
+
+  if (p1LegsEl) p1LegsEl.textContent = `Legs: ${p1.legsWon ?? 0}`;
+  if (p2LegsEl) p2LegsEl.textContent = `Legs: ${p2.legsWon ?? 0}`;
+  if (p1SetsEl) p1SetsEl.textContent = `Sets: ${p1.setsWon ?? 0}`;
+  if (p2SetsEl) p2SetsEl.textContent = `Sets: ${p2.setsWon ?? 0}`;
+
+  // Subtle active glow on the player pills
+  const pillP1 = document.getElementById("pill-p1");
+  const pillP2 = document.getElementById("pill-p2");
+  if (pillP1) {
+    pillP1.style.boxShadow = (active === 0)
+      ? "0 0 0 3px rgba(10,132,255,0.25), 0 10px 28px rgba(0,0,0,0.10)"
+      : "0 1px 1px rgba(0,0,0,0.04), 0 8px 22px rgba(0,0,0,0.05)";
+  }
+  if (pillP2) {
+    pillP2.style.boxShadow = (active === 1)
+      ? "0 0 0 3px rgba(255,69,58,0.25), 0 10px 28px rgba(0,0,0,0.10)"
+      : "0 1px 1px rgba(0,0,0,0.04), 0 8px 22px rgba(0,0,0,0.05)";
+  }
 }
 
 
@@ -194,11 +213,6 @@ function submitScore() {
 // ===============================
 // AVERAGES SCREEN
 // ===============================
-
-function pct(n) {
-  // keep as number with 1 decimal place string, e.g. "54.3%"
-  return `${(Math.round(n * 10) / 10).toFixed(1)}%`;
-}
 
 function renderAveragesScreen() {
   const container = document.getElementById("averages-content");
@@ -265,7 +279,7 @@ function renderAveragesScreen() {
             <span class="label">3-Dart: Attempts</span>
             <span class="value">${p1.chkAttempts3D ?? 0}</span>
           </div>
-            <div class="avg-item">
+          <div class="avg-item">
             <span class="label">3-Dart: Success %</span>
             <span class="value">${fmtPct(p1.chkPct3D ?? 0)}</span>
           </div>
