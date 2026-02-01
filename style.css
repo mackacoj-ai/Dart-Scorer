@@ -225,21 +225,13 @@ main {
     border-radius: 10px;
     color: #fff;
     cursor: pointer;
-    transition: transform 0.04s ease, filter 0.15s ease;
-}
-
-.btn-big:active {
-    transform: scale(0.99);
 }
 
 .btn-hit { background: #2e7d32; }
-.btn-hit:hover { filter: brightness(1.05); }
-
 .btn-miss { background: #c62828; }
-.btn-miss:hover { filter: brightness(1.05); }
 
 /* ===========================
-   FINISH % — POLISHED CARD
+   FINISH % — CLEAN CARD
    =========================== */
 
 #doubles-stats {
@@ -293,8 +285,6 @@ main {
     border-radius: 8px;
     min-width: 70px;
     text-align: right;
-    transition: background-color 180ms ease, color 180ms ease,
-                transform 120ms ease, opacity 180ms ease;
 }
 
 /* Dark mode adjustments */
@@ -304,7 +294,7 @@ main {
     }
 }
 
-/* Dynamic color tints */
+/* Color tint classes ONLY (no animation) */
 .stat-ok {
     background: rgba(46,125,50,0.14);
     color: #1b5e20;
@@ -324,26 +314,6 @@ main {
     .stat-ok   { background: rgba(46,125,50,0.28); color: #c8facc; }
     .stat-warn { background: rgba(245,160,0,0.25); color: #ffe3a0; }
     .stat-bad  { background: rgba(198,40,40,0.25); color: #ffc1c1; }
-}
-
-/* Animations */
-.stat-animate {
-    animation: statEnter 220ms ease-out both;
-}
-
-@keyframes statEnter {
-    from { opacity: 0; transform: translateY(4px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.stat-pulse {
-    animation: statPulse 360ms ease-out;
-}
-
-@keyframes statPulse {
-    0%   { transform: scale(1); }
-    40%  { transform: scale(1.035); }
-    100% { transform: scale(1); }
 }
 
 /* ===========================
