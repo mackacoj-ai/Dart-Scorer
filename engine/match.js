@@ -41,13 +41,33 @@
     }
 
     // =====================================
-    // CHECKOUT CATEGORY
+    // CHECKOUT CATEGORY (UPDATED)
+    // Rules:
+    //  - 1D: even 2..40, or 50 (bull)
+    //  - 2D: odd 3..49  OR 41..100 (excl 50, 99)
+    //  - 3D: 101..170 excluding [159,162,163,166,168,169]
     // =====================================
 
     function getFinishCategory(score) {
-        if ((score >= 2 && score <= 40 && score % 2 === 0) || score === 50) return 1; // 1D
-        if (score >= 41 && score <= 100 && score !== 50 && score !== 99) return 2;     // 2D
-        if (score >= 101 && score <= 170 && ![159,162,163,166,168,169].includes(score)) return 3; // 3D
+        // 1-dart finishes: any double (even 2..40) or bull (50)
+        if ((score >= 2 && score <= 40 && score % 2 === 0) || score === 50) {
+            return 1;
+        }
+
+        // 2-dart finishes:
+        //  - Odd 3..49 (e.g., 29 => S9 + D10)
+        //  - 41..100 (excluding 50 and 99)
+        if ((score >= 3 && score <= 49 && score % 2 === 1) ||
+            (score >= 41 && score <= 100 && score !== 50 && score !== 99)) {
+            return 2;
+        }
+
+        // 3-dart finishes: 101..170 excluding bogeys
+        if (score >= 101 && score <= 170 &&
+            ![159, 162, 163, 166, 168, 169].includes(score)) {
+            return 3;
+        }
+
         return 0;
     }
 
@@ -69,7 +89,7 @@
         const before = player.score;
         const after = before - entered;
 
-        // Track checkout attempt by start-of-turn category (mimic Doubles)
+        // Track checkout attempt by start-of-turn category (visit-level)
         const cat = getFinishCategory(before);
         if (cat > 0 && isFinishPossible(before)) {
             if (cat === 1) player.chkAttempts1D++;
@@ -91,7 +111,7 @@
         // CHECKOUT
         if (after === 0) {
             if (!isFinishPossible(before)) {
-                // If this were somehow impossible, bail (safety)
+                // Safety guard; should not happen with valid table/logic
                 return;
             }
 
