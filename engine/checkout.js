@@ -7,9 +7,6 @@
 
     const table = window.CheckoutTable; // loaded from checkout_table.js
 
-console.log("CheckoutTable inside checkout.js:", window.CheckoutTable);
-
-
 
 
     // =====================================
@@ -45,3 +42,4 @@ console.log("CheckoutTable inside checkout.js:", window.CheckoutTable);
     };
 
 })();
+
