@@ -83,6 +83,8 @@
     // -------------------------------
     const doublesState = {
         currentTarget: null,
+        currentCategory: null, // <-- NEW: 1 (1D), 2 (2D), or 3 (3D) for the current target
+
         attempts1D: 0,
         attempts2D: 0,
         attempts3D: 0,
@@ -149,6 +151,8 @@
 
     function resetDoublesState() {
         doublesState.currentTarget = null;
+        doublesState.currentCategory = null; // <-- NEW: clear the stored category
+
         doublesState.attempts1D = 0;
         doublesState.attempts2D = 0;
         doublesState.attempts3D = 0;
@@ -171,4 +175,3 @@
     };
 
 })();
-
