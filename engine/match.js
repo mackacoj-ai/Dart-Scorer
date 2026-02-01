@@ -6,10 +6,8 @@
 (function () {
 
     const State = window.StateEngine;
-    const Checkout = window.CheckoutEngine;
 
     const S = State.matchState;
-
 
     // =====================================
     // HELPERS
@@ -42,23 +40,14 @@
         startNewLeg(true);
     }
 
-
     // =====================================
     // CHECKOUT CATEGORY
-    // (mirrors your Arduino logic)
     // =====================================
 
     function getFinishCategory(score) {
-        if ((score >= 2 && score <= 40 && score % 2 === 0) || score === 50)
-            return 1; // 1D
-
-        if (score >= 41 && score <= 100 && score !== 50 && score !== 99)
-            return 2; // 2D
-
-        if (score >= 101 && score <= 170 &&
-            ![159, 162, 163, 166, 168, 169].includes(score))
-            return 3; // 3D
-
+        if ((score >= 2 && score <= 40 && score % 2 === 0) || score === 50) return 1; // 1D
+        if (score >= 41 && score <= 100 && score !== 50 && score !== 99) return 2;     // 2D
+        if (score >= 101 && score <= 170 && ![159,162,163,166,168,169].includes(score)) return 3; // 3D
         return 0;
     }
 
@@ -66,7 +55,6 @@
         if (score < 2 || score > 170) return false;
         return ![169, 168, 166, 165, 163, 162, 159].includes(score);
     }
-
 
     // =====================================
     // SCORE ENTRY
@@ -81,11 +69,13 @@
         const before = player.score;
         const after = before - entered;
 
-        // Track checkout attempt by start-of-turn category
+        // Track checkout attempt by start-of-turn category (mimic Doubles)
         const cat = getFinishCategory(before);
-        if (cat === 1) player.chkAttempts1D++;
-        if (cat === 2) player.chkAttempts2D++;
-        if (cat === 3) player.chkAttempts3D++;
+        if (cat > 0 && isFinishPossible(before)) {
+            if (cat === 1) player.chkAttempts1D++;
+            if (cat === 2) player.chkAttempts2D++;
+            if (cat === 3) player.chkAttempts3D++;
+        }
 
         // Count turn
         player.turnsThisLeg++;
@@ -94,7 +84,6 @@
         if (after < 0 || after === 1) {
             player.matchDarts += 3;
             player.legDarts += 3;
-
             S.currentPlayer = 1 - p;
             return;
         }
@@ -102,6 +91,7 @@
         // CHECKOUT
         if (after === 0) {
             if (!isFinishPossible(before)) {
+                // If this were somehow impossible, bail (safety)
                 return;
             }
 
@@ -153,7 +143,6 @@
         S.currentPlayer = 1 - p;
     }
 
-
     // =====================================
     // AVERAGES
     // =====================================
@@ -172,7 +161,7 @@
         const attempts = p.chkAttempts1D + p.chkAttempts2D + p.chkAttempts3D;
         const success = p.chkSuccess1D + p.chkSuccess2D + p.chkSuccess3D;
         if (attempts === 0) return 0;
-        // return as 0..100 number
+        // 0..100
         return (success / attempts) * 100;
     }
 
@@ -181,13 +170,11 @@
         return (success / attempts) * 100;
     }
 
-
     // =====================================
     // PUBLIC API
     // =====================================
 
     window.MatchEngine = {
-
         enterScore,
 
         getPlayer(i) {
