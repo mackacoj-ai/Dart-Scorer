@@ -38,7 +38,7 @@
   }
 
   // =====================================
-  // CATEGORY DETECTION (kept for legacy / safety)
+  // CATEGORY DETECTION (legacy/safety)
   // =====================================
 
   function getFinishCategory(score) {
@@ -50,7 +50,7 @@
 
   // =====================================
   // GENERATE NEXT TARGET
-  // -> Sets target, stores category, increments that category's attempts
+  // -> Sets target, stores category, increments attempts for that category
   // =====================================
 
   function nextTarget() {
@@ -121,7 +121,6 @@
       return S.currentTarget;
     },
 
-    // Optional helper if the UI needs the category number directly
     getCurrentCategory() {
       return S.currentCategory; // 1, 2, or 3
     },
@@ -153,7 +152,6 @@
 
     reset() {
       State.resetDoublesState();
-      // Make sure currentCategory is reset too if your resetDoublesState doesn't handle it
       if (typeof S.currentCategory !== "undefined") S.currentCategory = null;
       nextTarget();
     },
