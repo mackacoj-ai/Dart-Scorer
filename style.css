@@ -167,10 +167,10 @@ main {
 }
 
 .key-enter {
-    background-color: #28a745;   /* green */
+    background-color: #28a745;
     color: white;
     font-weight: bold;
-    grid-column: 1 / -1;         /* span entire row */
+    grid-column: 1 / -1;
     height: 60px;
     border-radius: 8px;
 }
@@ -207,7 +207,7 @@ main {
     margin-bottom: 1rem;
 }
 
-/* New: Full-width action buttons for doubles */
+/* Full-width Hit/Miss buttons */
 #doubles-actions {
     display: flex;
     flex-direction: column;
@@ -232,43 +232,118 @@ main {
     transform: scale(0.99);
 }
 
-.btn-hit { background: #2e7d32; } /* green */
+.btn-hit { background: #2e7d32; }
 .btn-hit:hover { filter: brightness(1.05); }
 
-.btn-miss { background: #c62828; } /* red */
+.btn-miss { background: #c62828; }
 .btn-miss:hover { filter: brightness(1.05); }
 
-/* New: Finish % block */
+/* ===========================
+   FINISH % — POLISHED CARD
+   =========================== */
+
 #doubles-stats {
     margin-top: 18px;
-    border-top: 1px solid #e6e6e6;
-    padding-top: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow:
+      0 1px 1px rgba(0,0,0,0.02),
+      0 6px 18px rgba(0,0,0,0.04);
 }
 
 #doubles-stats h3 {
-    margin: 0 0 6px 0;
+    margin: 0 0 10px 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: var(--text);
+    opacity: 0.85;
+}
+
+/* Each row */
+#doubles-stats .stat-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 4px;
+    border-top: 1px solid var(--border);
+}
+
+#doubles-stats .stat-line:first-of-type {
+    border-top: none;
+    padding-top: 2px;
+}
+
+#doubles-stats .stat-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    opacity: 0.9;
+}
+
+#doubles-stats .stat-value {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
     font-size: 1.05rem;
-    color: #333;
+    font-weight: 700;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 6px 10px;
+    border-radius: 8px;
+    min-width: 70px;
+    text-align: right;
+    transition: background-color 180ms ease, color 180ms ease,
+                transform 120ms ease, opacity 180ms ease;
 }
 
-#doubles-stats-line {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-        "Courier New", monospace;
-    white-space: pre-wrap; /* preserve spaces between columns */
-    font-size: 1rem;
-    color: #222;
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    #doubles-stats .stat-value {
+        background: rgba(255,255,255,0.06);
+    }
 }
 
-/* Legacy (no longer used in doubles, retained for safety if referenced elsewhere) */
-#next-target-btn {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 12px;
-    background: var(--accent);
-    color: white;
-    margin-top: 1rem;
+/* Dynamic color tints */
+.stat-ok {
+    background: rgba(46,125,50,0.14);
+    color: #1b5e20;
+}
+
+.stat-warn {
+    background: rgba(245,160,0,0.16);
+    color: #8a5a00;
+}
+
+.stat-bad {
+    background: rgba(198,40,40,0.14);
+    color: #7f1d1d;
+}
+
+@media (prefers-color-scheme: dark) {
+    .stat-ok   { background: rgba(46,125,50,0.28); color: #c8facc; }
+    .stat-warn { background: rgba(245,160,0,0.25); color: #ffe3a0; }
+    .stat-bad  { background: rgba(198,40,40,0.25); color: #ffc1c1; }
+}
+
+/* Animations */
+.stat-animate {
+    animation: statEnter 220ms ease-out both;
+}
+
+@keyframes statEnter {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.stat-pulse {
+    animation: statPulse 360ms ease-out;
+}
+
+@keyframes statPulse {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.035); }
+    100% { transform: scale(1); }
 }
 
 /* ===========================
