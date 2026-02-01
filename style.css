@@ -137,7 +137,7 @@ main {
 }
 
 /* ===========================
-   KEYPAD
+   KEYPAD (MATCH)
    =========================== */
 
 .keypad {
@@ -189,6 +189,12 @@ main {
    DOUBLES PRACTICE
    =========================== */
 
+#screen-doubles {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0.5rem;
+}
+
 .big-target {
     font-size: 3rem;
     text-align: center;
@@ -201,6 +207,59 @@ main {
     margin-bottom: 1rem;
 }
 
+/* New: Full-width action buttons for doubles */
+#doubles-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0 12px;
+}
+
+.btn-big {
+    display: block;
+    width: 100%;
+    padding: 18px 16px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.04s ease, filter 0.15s ease;
+}
+
+.btn-big:active {
+    transform: scale(0.99);
+}
+
+.btn-hit { background: #2e7d32; } /* green */
+.btn-hit:hover { filter: brightness(1.05); }
+
+.btn-miss { background: #c62828; } /* red */
+.btn-miss:hover { filter: brightness(1.05); }
+
+/* New: Finish % block */
+#doubles-stats {
+    margin-top: 18px;
+    border-top: 1px solid #e6e6e6;
+    padding-top: 12px;
+}
+
+#doubles-stats h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.05rem;
+    color: #333;
+}
+
+#doubles-stats-line {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+    white-space: pre-wrap; /* preserve spaces between columns */
+    font-size: 1rem;
+    color: #222;
+}
+
+/* Legacy (no longer used in doubles, retained for safety if referenced elsewhere) */
 #next-target-btn {
     width: 100%;
     padding: 1rem;
