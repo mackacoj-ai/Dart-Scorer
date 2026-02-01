@@ -50,7 +50,7 @@
 
   // =====================================
   // GENERATE NEXT TARGET
-  // -> Sets target, stores category, increments attempts for that category
+  // -> Sets target and category ONLY (no attempts increment here)
   // =====================================
 
   function nextTarget() {
@@ -59,41 +59,52 @@
     if (catIndex === 0) {
       S.currentTarget = getRandom1DScore();
       S.currentCategory = 1;
-      S.attempts1D++;
     } else if (catIndex === 1) {
       S.currentTarget = getRandom2DScore();
       S.currentCategory = 2;
-      S.attempts2D++;
     } else {
       S.currentTarget = getRandom3DScore();
       S.currentCategory = 3;
-      S.attempts3D++;
     }
   }
 
   // =====================================
   // ENTER VISIT (boolean): finished within the 3-dart visit (ending on a double)?
-  // Uses the stored category for success
+  // -> First increment attempts for the category we JUST attempted
+  // -> Then (if hit) increment success for that same category
+  // -> Then roll the next target
   // =====================================
 
+  function incrementAttemptsForCurrentCategory() {
+    if (S.currentCategory === 1) S.attempts1D++;
+    else if (S.currentCategory === 2) S.attempts2D++;
+    else if (S.currentCategory === 3) S.attempts3D++;
+  }
+
   function enterVisit({ hit }) {
+    // If not initialized, start from a valid target and return
     if (S.currentTarget == null || S.currentCategory == null) {
       nextTarget();
       return;
     }
 
+    // Count the attempt for the category we just played
+    incrementAttemptsForCurrentCategory();
+
+    // Count success for that same category (if hit)
     if (hit === true) {
       if (S.currentCategory === 1) S.success1D++;
       else if (S.currentCategory === 2) S.success2D++;
       else if (S.currentCategory === 3) S.success3D++;
     }
 
+    // Move on to the next target (no attempts increment here)
     nextTarget();
   }
 
   // =====================================
   // Legacy numeric path (kept for compatibility)
-  // Records success for the stored category only if score === currentTarget
+  // -> Attempts credited on visit end, success if score matches
   // =====================================
 
   function enterScore(score) {
@@ -102,6 +113,10 @@
       return;
     }
 
+    // Count the attempt for the category we just played
+    incrementAttemptsForCurrentCategory();
+
+    // If exact checkout hit, count success
     if (score === S.currentTarget) {
       if (S.currentCategory === 1) S.success1D++;
       else if (S.currentCategory === 2) S.success2D++;
@@ -129,12 +144,10 @@
       nextTarget();
     },
 
-    // New boolean entry for Hit/Miss UI
     enterVisit(payload) {
       enterVisit(payload);
     },
 
-    // Old numeric entry (not used by new UI, kept for safety)
     enterScore(score) {
       enterScore(score);
     },
@@ -153,11 +166,11 @@
     reset() {
       State.resetDoublesState();
       if (typeof S.currentCategory !== "undefined") S.currentCategory = null;
-      nextTarget();
+      nextTarget(); // start with a target shown, but attempts won't change until first visit ends
     },
 
     init() {
-      // Guard so we don't double-increment attempts if init() is called again
+      // Guard so we don't regenerate if already initialized
       if (S.currentTarget == null || S.currentCategory == null) {
         nextTarget();
       }
