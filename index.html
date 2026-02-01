@@ -5,23 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Macka Dart Scorer</title>
 
-  <!-- Styles (keeps your layout intact) -->
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- PWA (Android/Chrome reads manifest) -->
+  <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#000000" />
 
-  <!-- iOS Home Screen icon (Safari ignores manifest icons) -->
-  <!-- Must be exactly 180×180 PNG, next to index.html -->
+  <!-- iOS icon -->
   <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png" />
 
-  <!-- Desktop favicons (optional but recommended) -->
+  <!-- Favicons -->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
   <link rel="shortcut icon" href="favicon.ico" />
 
-  <!-- Optional: make iOS look more app-like when launched -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 </head>
@@ -33,11 +31,10 @@
     <button data-screen="match">Match</button>
     <button data-screen="averages">Averages</button>
     <button data-screen="players">Players</button>
-    <button data-screen="doubles">Doubles</button>
+   button>
     <button data-screen="settings">Settings</button>
   </nav>
 
-  <!-- Main App Container -->
   <main>
 
     <!-- MATCH SCREEN -->
@@ -91,4 +88,64 @@
       <button id="add-player-btn">Add Player</button>
     </section>
 
+    <!-- DOUBLES PRACTICE -->
+    <section id="screen-doubles" class="screen">
+      <h2>Doubles Practice</h2>
 
+      <div id="doubles-target" class="big-target">—</div>
+      <div id="doubles-suggestion" class="suggestion">—</div>
+
+      <!-- Hit/Miss buttons -->
+      <div id="doubles-actions" role="group">
+        <button id="doubles-hit-btn" class="btn-big btn-hit">Hit it!</button>
+        <button id="doubles-miss-btn" class="btn-big btn-miss">Missed it!</button>
+      </div>
+
+      <!-- FINISH % (polished card) -->
+      <div id="doubles-stats" aria-live="polite">
+        <h3>Finish %</h3>
+
+        <div class="stat-line">
+          <span class="stat-label">1 Dart</span>
+          <span id="doubles-pct-1d" class="stat-value">0.0%</span>
+        </div>
+
+        <div class="stat-line">
+          <span class="stat-label">2 Dart</span>
+          <span id="doubles-pct-2d" class="stat-value">0.0%</span>
+        </div>
+
+        <div class="stat-line">
+          <span class="stat-label">3 Dart</span>
+          <span id="doubles-pct-3d" class="stat-value">0.0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="screen-settings" class="screen">
+      <h2>Settings</h2>
+      <button id="reset-data-btn">Reset All Data</button>
+    </section>
+
+  </main>
+
+  <!-- ENGINE SCRIPTS -->
+  <script src="engine/state.js"></script>
+  <script src="data/checkout_table.js"></script>
+  <script src="engine/checkout.js"></script>
+  <script src="engine/match.js"></script>
+  <script src="engine/doubles.js"></script>
+  <script src="engine/players.js"></script>
+
+  <!-- APP -->
+  <script src="app.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
+
+</body>
+</html>
