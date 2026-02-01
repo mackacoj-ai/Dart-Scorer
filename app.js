@@ -11,7 +11,6 @@ let currentScreen = "match";
 // Engine modules (loaded later)
 let Match = null;
 let Doubles = null;
-let Players = null;
 let Checkout = null;
 
 
@@ -23,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Load engine modules
   Match = window.MatchEngine;
   Doubles = window.DoublesEngine;
-  Players = window.PlayersEngine;
   Checkout = window.CheckoutEngine;
 
   // Init doubles once (engine guards against duplicates)
@@ -71,8 +69,8 @@ function switchScreen(name) {
 
   if (name === "match") renderMatchScreen();
   if (name === "averages") renderAveragesScreen();
-  if (name === "players") renderPlayersScreen();
   if (name === "doubles") renderDoublesScreen();
+  // players screen removed
 }
 
 
@@ -104,7 +102,6 @@ function setupKeypad() {
 
 function handleDigit(digit) {
   if (scoreBuffer.length >= 3) return; // max 180
-
   scoreBuffer += digit;
   updateEntryDisplay();
 }
@@ -160,6 +157,17 @@ function renderMatchScreen() {
   const p2Card = document.getElementById("p2");
   if (p1Card) p1Card.classList.toggle("active", active === 0);
   if (p2Card) p2Card.classList.toggle("active", active === 1);
+
+  // NEW: Legs/Sets counters
+  const p1Legs = document.getElementById("p1-legs");
+  const p2Legs = document.getElementById("p2-legs");
+  const p1Sets = document.getElementById("p1-sets");
+  const p2Sets = document.getElementById("p2-sets");
+
+  if (p1Legs) p1Legs.textContent = p1.legsWon ?? 0;
+  if (p2Legs) p2Legs.textContent = p2.legsWon ?? 0;
+  if (p1Sets) p1Sets.textContent = p1.setsWon ?? 0;
+  if (p2Sets) p2Sets.textContent = p2.setsWon ?? 0;
 }
 
 
@@ -187,63 +195,135 @@ function submitScore() {
 // AVERAGES SCREEN
 // ===============================
 
-function renderAveragesScreen() {
-  const container = document.getElementById("averages-content");
-  const stats = Match.getAverages();
-
-  if (!container) return;
-
-  container.innerHTML = `
-    <div class="player-card">
-      <h3>${stats.p1.name}</h3>
-      <p>3-Dart Avg: ${stats.p1.matchAvg.toFixed(1)}</p>
-      <p>Turns/Leg Won: ${stats.p1.turnsAvg.toFixed(1)}</p>
-      <p>Checkout %: ${stats.p1.checkout}%</p>
-    </div>
-
-    <div class="player-card">
-      <h3>${stats.p2.name}</h3>
-      <p>3-Dart Avg: ${stats.p2.matchAvg.toFixed(1)}</p>
-      <p>Turns/Leg Won: ${stats.p2.turnsAvg.toFixed(1)}</p>
-      <p>Checkout %: ${stats.p2.checkout}%</p>
-    </div>
-  `;
+function pct(n) {
+  // keep as number with 1 decimal place string, e.g. "54.3%"
+  return `${(Math.round(n * 10) / 10).toFixed(1)}%`;
 }
 
+function renderAveragesScreen() {
+  const container = document.getElementById("averages-content");
+  if (!container) return;
 
-// ===============================
-// PLAYERS SCREEN
-// ===============================
+  const stats = Match.getAverages();
 
-function renderPlayersScreen() {
-  const list = document.getElementById("players-list");
-  const players = Players.getAll();
+  const p1 = stats.p1;
+  const p2 = stats.p2;
 
-  if (!list) return;
+  // Safe formatting helpers
+  const fmtNum = (n, d = 1) => {
+    if (typeof n !== "number" || isNaN(n)) return "0.0";
+    return n.toFixed(d);
+  };
+  const fmtPct = (n) => {
+    if (typeof n !== "number" || isNaN(n)) return "0.0%";
+    return `${fmtNum(n, 1)}%`;
+  };
 
-  list.innerHTML = "";
+  container.innerHTML = `
+    <section class="averages-grid">
+      <article class="avg-card avg-card--p1">
+        <h3>${p1.name}</h3>
+        <div class="avg-main">${fmtNum(p1.matchAvg, 1)}</div>
+        <div class="avg-subgrid">
+          <div class="avg-item">
+            <span class="label">Checkout %</span>
+            <span class="value">${fmtPct(p1.checkout)}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">Darts thrown</span>
+            <span class="value">${p1.matchDarts ?? 0}</span>
+          </div>
 
-  players.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "player-card";
+          <div class="avg-item">
+            <span class="label">Turns / Leg Won</span>
+            <span class="value">${fmtNum(p1.turnsAvg, 1)}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">Sets</span>
+            <span class="value">${p1.setsWon ?? 0}</span>
+          </div>
 
-    card.innerHTML = `
-      <strong>${p.name}</strong><br>
-      ID: ${p.id}<br>
-      Legs Won: ${p.legsWon}<br>
-      Sets Won: ${p.setsWon}<br>
-      <button data-id="${p.id}" class="delete-player">Delete</button>
-    `;
+          <div class="avg-item">
+            <span class="label">1-Dart: Attempts</span>
+            <span class="value">${p1.chkAttempts1D ?? 0}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">1-Dart: Success %</span>
+            <span class="value">${fmtPct(p1.chkPct1D ?? 0)}</span>
+          </div>
 
-    list.appendChild(card);
-  });
+          <div class="avg-item">
+            <span class="label">2-Dart: Attempts</span>
+            <span class="value">${p1.chkAttempts2D ?? 0}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">2-Dart: Success %</span>
+            <span class="value">${fmtPct(p1.chkPct2D ?? 0)}</span>
+          </div>
 
-  document.querySelectorAll(".delete-player").forEach(btn => {
-    btn.addEventListener("click", () => {
-      Players.delete(btn.dataset.id);
-      renderPlayersScreen();
-    });
-  });
+          <div class="avg-item">
+            <span class="label">3-Dart: Attempts</span>
+            <span class="value">${p1.chkAttempts3D ?? 0}</span>
+          </div>
+            <div class="avg-item">
+            <span class="label">3-Dart: Success %</span>
+            <span class="value">${fmtPct(p1.chkPct3D ?? 0)}</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="avg-card avg-card--p2">
+        <h3>${p2.name}</h3>
+        <div class="avg-main">${fmtNum(p2.matchAvg, 1)}</div>
+        <div class="avg-subgrid">
+          <div class="avg-item">
+            <span class="label">Checkout %</span>
+            <span class="value">${fmtPct(p2.checkout)}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">Darts thrown</span>
+            <span class="value">${p2.matchDarts ?? 0}</span>
+          </div>
+
+          <div class="avg-item">
+            <span class="label">Turns / Leg Won</span>
+            <span class="value">${fmtNum(p2.turnsAvg, 1)}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">Sets</span>
+            <span class="value">${p2.setsWon ?? 0}</span>
+          </div>
+
+          <div class="avg-item">
+            <span class="label">1-Dart: Attempts</span>
+            <span class="value">${p2.chkAttempts1D ?? 0}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">1-Dart: Success %</span>
+            <span class="value">${fmtPct(p2.chkPct1D ?? 0)}</span>
+          </div>
+
+          <div class="avg-item">
+            <span class="label">2-Dart: Attempts</span>
+            <span class="value">${p2.chkAttempts2D ?? 0}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">2-Dart: Success %</span>
+            <span class="value">${fmtPct(p2.chkPct2D ?? 0)}</span>
+          </div>
+
+          <div class="avg-item">
+            <span class="label">3-Dart: Attempts</span>
+            <span class="value">${p2.chkAttempts3D ?? 0}</span>
+          </div>
+          <div class="avg-item">
+            <span class="label">3-Dart: Success %</span>
+            <span class="value">${fmtPct(p2.chkPct3D ?? 0)}</span>
+          </div>
+        </div>
+      </article>
+    </section>
+  `;
 }
 
 
@@ -337,13 +417,12 @@ function bindDoublesButtons() {
 const resetBtn = document.getElementById("reset-data-btn");
 if (resetBtn) {
   resetBtn.addEventListener("click", () => {
-    if (confirm("Reset all saved players and stats?")) {
-      Players.reset();
+    if (confirm("Reset all match and doubles data?")) {
       Match.reset();
       Doubles.reset();
       renderMatchScreen();
-      renderPlayersScreen();
       renderDoublesScreen();
+      renderAveragesScreen();
     }
   });
 }
