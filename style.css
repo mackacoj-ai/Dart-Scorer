@@ -186,48 +186,108 @@ main {
 }
 
 /* ===========================
-   NEW: MATCH META (Sets/Legs pills)
+   MATCH META — Player pills
    =========================== */
 
-.match-meta {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    margin: 0.75rem 0 1rem 0;
+.match-meta--pills {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem 0;
 }
 
-.meta-group {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 0.5rem 0.75rem;
+.player-pill {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.15));
+  box-shadow:
+    0 1px 1px rgba(0,0,0,0.04),
+    0 8px 22px rgba(0,0,0,0.05);
+  transition: transform .12s ease, box-shadow .2s ease;
 }
 
-.meta-label {
-    font-size: 0.8rem;
-    opacity: 0.75;
-    margin-bottom: 0.25rem;
+.player-pill:focus-within,
+.player-pill:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 1px rgba(0,0,0,0.06),
+    0 10px 28px rgba(0,0,0,0.08);
 }
 
-.meta-pills {
-    display: flex;
-    gap: 0.5rem;
+.pill-name {
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  font-size: 1rem;
+  line-height: 1.1;
 }
 
-.pill {
-    padding: 0.35rem 0.6rem;
-    border-radius: 999px;
-    font-weight: 700;
-    min-width: 2.25rem;
-    text-align: center;
+.pill-stats {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
 }
 
-.pill--p1 { background: rgba(10,132,255,0.18); color: var(--text); }
-.pill--p2 { background: rgba(255,59,48,0.18); color: var(--text); }
+.pill-stat {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
 
+.pill-dot {
+  opacity: 0.55;
+  font-weight: 800;
+}
+
+/* Colourful tints for each player */
+.pill--p1 {
+  background:
+    linear-gradient(180deg, rgba(10,132,255,0.18), rgba(10,132,255,0.10)),
+    var(--card-bg);
+  border-color: rgba(10,132,255,0.35);
+}
+
+.pill--p2 {
+  background:
+    linear-gradient(180deg, rgba(255,69,58,0.18), rgba(255,69,58,0.10)),
+    var(--card-bg);
+  border-color: rgba(255,69,58,0.35);
+}
+
+/* Optional classes (not used directly now) */
+.pill-active--p1 {
+  box-shadow:
+    0 0 0 3px rgba(10,132,255,0.25),
+    0 10px 28px rgba(0,0,0,0.10);
+}
+.pill-active--p2 {
+  box-shadow:
+    0 0 0 3px rgba(255,69,58,0.25),
+    0 10px 28px rgba(0,0,0,0.10);
+}
+
+/* Dark-mode tweaks */
 @media (prefers-color-scheme: dark) {
-    .pill--p1 { background: rgba(10,132,255,0.28); }
-    .pill--p2 { background: rgba(255,69,58,0.28); }
+  .player-pill {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)),
+      var(--card-bg);
+  }
+  .pill--p1 { border-color: rgba(10,132,255,0.45); }
+  .pill--p2 { border-color: rgba(255,69,58,0.45); }
+}
+
+/* Stack on narrow screens */
+@media (max-width: 640px) {
+  .match-meta--pills {
+    grid-template-columns: 1fr;
+  }
+  .pill-stats { gap: 10px; }
+  .pill-stat { font-size: 1.1rem; }
 }
 
 /* ===========================
@@ -362,7 +422,7 @@ main {
 }
 
 /* ===========================
-   NEW: AVERAGES — Side-by-side cards
+   AVERAGES — Side-by-side cards
    =========================== */
 
 .averages-grid {
