@@ -35,8 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initial UI render
     renderMatchScreen();
 
-    console.log("Test checkout 170:", Checkout.getSuggestion(170));
-
 });
 
 
@@ -269,4 +267,5 @@ document.getElementById("reset-data-btn").addEventListener("click", () => {
         renderPlayersScreen();
     }
 });
+
 
