@@ -241,17 +241,41 @@ function renderPlayersScreen() {
 // ===============================
 
 function renderDoublesScreen() {
-    const target = Doubles.getCurrentTarget();
-    const suggestion = target ? Checkout.getSuggestion(target) : null;
+  const target = Doubles.getCurrentTarget();
+  const suggestion = target ? Checkout.getSuggestion(target) : null;
 
-    document.getElementById("doubles-target").textContent = target;
-    document.getElementById("doubles-suggestion").textContent = suggestion || "—";
+  document.getElementById("doubles-target").textContent = target ?? "—";
+  document.getElementById("doubles-suggestion").textContent = suggestion || "—";
+
+  // --- Finish % line ---
+  const st = Doubles.getStats();
+  const p1 = st.attempts1D ? (st.success1D / st.attempts1D) * 100 : 0;
+  const p2 = st.attempts2D ? (st.success2D / st.attempts2D) * 100 : 0;
+  const p3 = st.attempts3D ? (st.success3D / st.attempts3D) * 100 : 0;
+
+  const fmt = (n) => (Math.round(n * 10) / 10).toFixed(1);
+  const statsLine = `1 Dart: ${fmt(p1)}%     2 Dart: ${fmt(p2)}%     3 Dart: ${fmt(p3)}%`;
+
+  const statsEl = document.getElementById("doubles-stats-line");
+  if (statsEl) statsEl.textContent = statsLine;
 }
 
-document.getElementById("next-target-btn").addEventListener("click", () => {
-    Doubles.nextTarget();
+// Doubles Hit / Miss buttons
+const hitBtn  = document.getElementById("doubles-hit-btn");
+const missBtn = document.getElementById("doubles-miss-btn");
+
+if (hitBtn) {
+  hitBtn.addEventListener("click", () => {
+    Doubles.enterVisit({ hit: true });
     renderDoublesScreen();
-});
+  });
+}
+if (missBtn) {
+  missBtn.addEventListener("click", () => {
+    Doubles.enterVisit({ hit: false });
+    renderDoublesScreen();
+  });
+}
 
 
 // ===============================
@@ -267,5 +291,6 @@ document.getElementById("reset-data-btn").addEventListener("click", () => {
         renderPlayersScreen();
     }
 });
+
 
 
