@@ -35,7 +35,7 @@
   function getRandom3DScore() {
     while (true) {
       const s = Math.floor(Math.random() * (170 - 101 + 1)) + 101;
-      if (![159, 162, 163, 166, 168, 169].includes(s)) return s;
+      if (![159, 162, 163, 165, 166, 168, 169].includes(s)) return s;
     }
   }
 
@@ -180,3 +180,4 @@
   };
 
 })();
+
