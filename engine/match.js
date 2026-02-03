@@ -45,7 +45,7 @@
     // Rules:
     //  - 1D: even 2..40, or 50 (bull)
     //  - 2D: odd 3..49  OR 41..100 (excl 50, 99)
-    //  - 3D: 101..170 excluding [159,162,163,166,168,169]
+    //  - 3D: 101..170 excluding [159,162,163, 165, 166,168,169]
     // =====================================
 
     function getFinishCategory(score) {
@@ -64,7 +64,7 @@
 
         // 3-dart finishes: 101..170 excluding bogeys
         if (score >= 101 && score <= 170 &&
-            ![159, 162, 163, 166, 168, 169].includes(score)) {
+            ![159, 162, 163, 165, 166, 168, 169].includes(score)) {
             return 3;
         }
 
@@ -242,3 +242,4 @@
     };
 
 })();
+
